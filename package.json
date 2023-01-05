@@ -7,21 +7,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "npm run clean && next build && next export",
     "test": "jest --watch",
-    "clean": "rm -rf .next docs"
+    "clean": "rm -rf .next"
   },
   "dependencies": {
     "@next/font": "13.1.1",
-    "@types/node": "18.11.18",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
+    "bootstrap": "^5.2.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "next": "13.1.1",
     "pdfkit": "^0.13.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sass": "^1.57.1",
     "typescript": "4.9.4"
   },
   "devDependencies": {

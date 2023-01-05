@@ -5,11 +5,11 @@ import MathCalc from "./mathCalc";
 
 const mathCalc = new MathCalc();
 const question = new Question(mathCalc, {
-  topRange: 10,
+  scope: 10,
   questionCount: 20,
   numOfOps: 1,
   allowedOps: [Op.plus],
-  topRangeToResult: false,
+  scopeToResult: false,
 });
 
 const questionList = question.make();

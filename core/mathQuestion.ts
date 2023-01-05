@@ -16,24 +16,26 @@ type MathQuestion = {
 
 export default class Question {
   private ops: Op[] = [Op.plus, Op.subtract, Op.product, Op.divide];
-  private topRange: number = 100;
-  private topRangeToResult: boolean = true;
+  private scope: number = 100;
+  private scopeToResult: boolean = true;
+  private excludeNegative: boolean = true;
   private questionCount: number = 10;
   private calc: MathCalc;
   private numOfOps: number = 1;
   constructor(
     calc: MathCalc,
     options: {
-      topRange: number;
-      topRangeToResult?: boolean;
+      scope: number;
+      scopeToResult?: boolean;
+      excludeNegative?: boolean;
       questionCount?: number;
       allowedOps?: Op[];
       numOfOps?: number;
     }
   ) {
     this.calc = calc;
-    if (options?.topRange) {
-      this.topRange = options.topRange;
+    if (options?.scope) {
+      this.scope = options.scope;
     }
     if (options?.allowedOps) {
       this.ops = options.allowedOps;
@@ -44,13 +46,14 @@ export default class Question {
     if (options?.numOfOps) {
       this.numOfOps = options.numOfOps;
     }
-    this.topRangeToResult = options.topRangeToResult ?? this.topRangeToResult;
+    this.scopeToResult = options.scopeToResult ?? this.scopeToResult;
+    this.excludeNegative = options.excludeNegative ?? this.excludeNegative;
   }
 
   private pickNumber(picked: number[] = []): number[] {
     if (Object.keys(picked).length >= this.questionCount)
       return Object.values(picked);
-    const pick = Math.floor(Math.random() * this.topRange);
+    const pick = Math.floor(Math.random() * this.scope);
     return this.pickNumber([...picked, pick]);
   }
   private pickOp() {
@@ -75,7 +78,7 @@ export default class Question {
     return madeQuestions;
   }
   make() {
-    if (!this.topRangeToResult) {
+    if (!this.scopeToResult && !this.excludeNegative) {
       return this.makeQuestions();
     }
     let resultQuestions: MathQuestion[] = [];
@@ -85,7 +88,8 @@ export default class Question {
         ...this.makeQuestions().filter(
           (q) =>
             !isNaN(parseFloat(q.result)) &&
-            parseFloat(q.result) <= this.topRange
+            (!this.scopeToResult || parseFloat(q.result) <= this.scope) &&
+            (!this.excludeNegative || parseFloat(q.result) >= 0)
         ),
       ];
     }

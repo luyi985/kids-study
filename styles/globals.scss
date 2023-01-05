@@ -1,0 +1,14 @@
+:root {
+  --max-width: 1300px;
+}
+
+.page-row {
+  width: 100%;
+  margin: 0 auto;
+  max-width: var(--max-width);
+}
+
+main {
+  width: 100vw;
+  min-height: 100vh;
+}
