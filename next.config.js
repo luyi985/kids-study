@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: '',
   reactStrictMode: true,
   exportPathMap: true,
   images: {
