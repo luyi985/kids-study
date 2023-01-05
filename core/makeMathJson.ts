@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import MathCalc from "./mathCalc";
-import Question, { Op } from "./mathQuestion";
+import Question, { MathQuestion, Op } from "./mathQuestion";
 
 const SUBTRACT_SCOPE = 20;
 const NUMBER_UPPER_SCOPE = 10;
@@ -25,7 +25,7 @@ const subtractQuestionMaker = new Question(mathCalc, {
   scopeToResult: false,
 });
 
-export const additionJson = () => {
+export const additionJson = (): MathQuestion[] => {
   try {
     const data = fs.readFileSync(`${JSON_LOCATION}/plus.json`).toString();
     return JSON.parse(data);
@@ -40,7 +40,7 @@ export const additionJson = () => {
   }
 };
 
-export const subtractionJson = () => {
+export const subtractionJson = (): MathQuestion[] => {
   try {
     const data = fs.readFileSync(`${JSON_LOCATION}/subtract.json`).toString();
     return JSON.parse(data);

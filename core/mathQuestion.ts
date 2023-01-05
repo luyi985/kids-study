@@ -8,7 +8,7 @@ export enum Op {
 
 const calc = new MathCalc();
 
-type MathQuestion = {
+export type MathQuestion = {
   question: string;
   result: string;
   steps: string[];

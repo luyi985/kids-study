@@ -8,6 +8,9 @@ type LinkType = {
   url: string;
 };
 
+export const ADDITION_URL = "/math/addition/";
+export const SUBTRACTION_URL = "/math/subtraction/";
+export const NUM_PER_DAY = 25;
 const NavLinks = [
   {
     label: "Mathematics",
@@ -15,9 +18,24 @@ const NavLinks = [
   },
   {
     label: "Addition practice",
-    path: ["math", "practices"],
+    path: ["math", "addition"],
+  },
+  {
+    label: "Subtraction practice",
+    path: ["math", "subtraction"],
   },
 ];
+
+export const makeStaticPracticePath = (
+  baseUrl: string,
+  totalCount: number,
+  numPerDay: number = NUM_PER_DAY
+): Array<{ key: string; label: string; url: string }> =>
+  new Array(Math.ceil(totalCount / numPerDay)).fill(null).map((_, idx) => ({
+    key: `${idx + 1}`,
+    label: `Day ${idx + 1}`,
+    url: `${baseUrl}${idx + 1}`,
+  }));
 
 const makeLinks = (): LinkType[] =>
   NavLinks.map((link) => ({
@@ -27,7 +45,7 @@ const makeLinks = (): LinkType[] =>
     level: link.path.length,
   }));
 
-const NavLink = ({ label, url }: { label: string; url: string }) => (
+export const NavLink = ({ label, url }: { label: string; url: string }) => (
   <Link href={url}>{label}</Link>
 );
 
