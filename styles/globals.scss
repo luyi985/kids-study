@@ -12,3 +12,10 @@ main {
   width: 100vw;
   min-height: 100vh;
 }
+
+.list-group {
+  box-sizing: border-box;
+  &.wrap {
+    flex-wrap: wrap;
+  }
+}

@@ -7,9 +7,9 @@ import { subtractionJson } from "@/core/makeMathJson";
 import * as React from "react";
 
 const Subtraction = ({ totalSubtractions }: { totalSubtractions: number }) => (
-  <ul>
+  <ul className="list-group list-group-horizontal wrap">
     {makeStaticPracticePath(SUBTRACTION_URL, totalSubtractions).map((props) => (
-      <li key={props.key}>
+      <li key={props.key} className="list-group-item col-2">
         <NavLink {...props} />
       </li>
     ))}

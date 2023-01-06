@@ -5,9 +5,9 @@ import {
 } from "@/components/nav";
 import { additionJson } from "@/core/makeMathJson";
 const Addition = ({ totalAdditions }: { totalAdditions: number }) => (
-  <ul>
+  <ul className="list-group list-group-horizontal wrap">
     {makeStaticPracticePath(ADDITION_URL, totalAdditions).map((props) => (
-      <li key={props.key}>
+      <li key={props.key} className="list-group-item col-2">
         <NavLink {...props} />
       </li>
     ))}
@@ -22,4 +22,3 @@ export async function getStaticProps(context: any) {
     props: { totalAdditions: data.length },
   };
 }
-
