@@ -42,21 +42,6 @@ export const makeStaticPracticePath = (
     url: `${baseUrl}${idx + 1}`,
   }));
 
-export const DropDownNavItem: React.FC<{
-  parent: LinkType;
-  childItems: LinkType[];
-}> = ({ parent, childItems }) => {
-  return (
-    <div className="dropdown">
-      <NavLink className="btn btn-primary dropdown-toggle" {...parent} />
-      <ul className="dropdown-menu show">
-        {childItems.map((link) => (
-          <NavLink {...link} key={link.url} className="dropdown-item" />
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 export const NavLink = ({
   label,

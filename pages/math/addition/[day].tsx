@@ -3,6 +3,7 @@ import {
   makeStaticPracticePath,
   NUM_PER_DAY,
 } from "@/components/nav";
+import { Questions } from "@/components/question";
 import { additionJson } from "@/core/makeMathJson";
 import { MathQuestion } from "@/core/mathQuestion";
 import { FC } from "react";
@@ -10,6 +11,7 @@ import { FC } from "react";
 const Addition: FC<{
   additions: MathQuestion[];
 }> = ({ additions }) => {
+  return <Questions questions={additions} />;
   return <pre>{JSON.stringify(additions, null, 4)}</pre>;
 };
 

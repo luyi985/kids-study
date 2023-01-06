@@ -6,6 +6,8 @@
   width: 100%;
   margin: 0 auto;
   max-width: var(--max-width);
+  box-sizing: border-box;
+  padding: 0 5px;
 }
 
 main {
