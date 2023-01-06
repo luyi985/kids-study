@@ -1,5 +1,6 @@
 import { MathQuestion } from "@/core/mathQuestion";
 import React, { useRef, useState } from "react";
+import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
 
 const questionStyle = {
   padding: "20px",
@@ -78,6 +79,7 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
                   setQuestionList(clone);
                 }}
               />
+              <CanvasDrawPanel handleSubmit={() => {}} />
             </div>
           </div>
         </div>
