@@ -6,12 +6,24 @@ import {
 import { Questions } from "@/components/question";
 import { subtractionJson } from "@/core/makeMathJson";
 import { MathQuestion } from "@/core/mathQuestion";
+import Head from "next/head";
 import { FC } from "react";
 const subtraction: FC<{
   subtractions: MathQuestion[];
 }> = ({ subtractions }) => {
-  return <Questions questions={subtractions} />;
-  return <pre>{JSON.stringify(subtractions, null, 4)}</pre>;
+  return (
+    <>
+      <Head>
+        <title>Kids Study</title>
+        <meta name="description" content="Make my kids better" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no"
+        />
+      </Head>
+      <Questions questions={subtractions} />
+    </>
+  );
 };
 
 export default subtraction;

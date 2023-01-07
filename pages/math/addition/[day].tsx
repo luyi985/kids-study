@@ -6,13 +6,25 @@ import {
 import { Questions } from "@/components/question";
 import { additionJson } from "@/core/makeMathJson";
 import { MathQuestion } from "@/core/mathQuestion";
+import Head from "next/head";
 import { FC } from "react";
 
 const Addition: FC<{
   additions: MathQuestion[];
 }> = ({ additions }) => {
-  return <Questions questions={additions} />;
-  return <pre>{JSON.stringify(additions, null, 4)}</pre>;
+  return (
+    <>
+      <Head>
+        <title>Kids Study</title>
+        <meta name="description" content="Make my kids better" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no"
+        />
+      </Head>
+      <Questions questions={additions} />
+    </>
+  );
 };
 
 export default Addition;
