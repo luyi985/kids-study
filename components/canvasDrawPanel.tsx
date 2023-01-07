@@ -4,31 +4,35 @@ class DrawPanel {
   private canvas: HTMLCanvasElement | undefined;
   private ctx: CanvasRenderingContext2D | null = null;
   private toPainting: boolean = false;
-  private x: number = 0;
-  private y: number = 0;
   constructor(canvas: HTMLCanvasElement | undefined) {
     if (canvas) {
       this.canvas = canvas;
 
       this.ctx = canvas.getContext("2d");
+      if (this.ctx) {
+        this.ctx.strokeStyle = "#ddd";
+        this.ctx.lineCap = "round";
+        this.ctx.lineWidth = 5;
+      }
       this.canvas.style.background = "#333";
-      this.canvas.addEventListener("mouseup", this.stopPainting);
-      this.canvas.addEventListener("touchstart", this.stopPainting);
+      this.canvas.style.width = "100%";
+
       this.canvas.addEventListener("mousedown", this.startPainting);
-      this.canvas.addEventListener("touchend", this.startPainting);
+      this.canvas.addEventListener("touchstart", this.startPainting);
+      this.canvas.addEventListener("mouseup", this.stopPainting);
+      this.canvas.addEventListener("mouseout", this.stopPainting);
+      this.canvas.addEventListener("touchend", this.stopPainting);
       this.canvas.addEventListener("mousemove", this.draw);
       this.canvas.addEventListener("touchmove", this.draw);
     }
   }
   private startPainting = (e: TouchEvent | MouseEvent) => {
     e.preventDefault();
-
     this.ctx?.beginPath();
     this.toPainting = true;
   };
   private stopPainting = (e: TouchEvent | MouseEvent) => {
     e.preventDefault();
-
     this.toPainting = false;
   };
 
@@ -42,7 +46,7 @@ class DrawPanel {
         //@ts-ignore
         x: (e.touches[0].clientX - rect.left) * scaleX,
         //@ts-ignore
-        y: (e.touches[0].clientY - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY,
       };
     }
     return {
@@ -54,34 +58,24 @@ class DrawPanel {
   };
   private draw = (e: MouseEvent | TouchEvent) => {
     e.preventDefault();
-
     if (!this.toPainting || !this.ctx) return;
 
-    this.ctx.strokeStyle = "#ddd";
-    this.ctx.lineCap = "round";
-    this.ctx.lineWidth = 5;
     const { x, y } = this.getMousePos(e);
-    this.x = x;
-    this.y = y;
     this.ctx.lineTo(x, y);
     this.ctx.stroke();
-    this.ctx?.clearRect(0, 0, this.canvas?.width!, 25);
-    this.ctx.font = "10px Arial";
-    this.ctx.fillStyle = "#ddd";
-    this.ctx.fillText(`(${x.toFixed(2)},${y.toFixed(2)})`, 0, 20);
-    this.ctx?.beginPath();
   };
   clearCanvas = () => {
     if (!this.canvas) return;
     this.ctx?.clearRect(0, 0, this.canvas?.width, this.canvas?.height);
   };
   clearEvent = () => {
-    this.canvas?.removeEventListener("mouseup", this.stopPainting);
-    this.canvas?.removeEventListener("touchstart", this.stopPainting);
-    this.canvas?.removeEventListener("mousedown", this.startPainting);
-    this.canvas?.removeEventListener("touchend", this.startPainting);
-    this.canvas?.removeEventListener("mousemove", this.draw);
-    this.canvas?.removeEventListener("touchmove", this.draw);
+    this.canvas!.removeEventListener("mousedown", this.startPainting);
+    this.canvas!.removeEventListener("touchstart", this.startPainting);
+    this.canvas!.removeEventListener("mouseup", this.stopPainting);
+    this.canvas!.removeEventListener("mouseout", this.stopPainting);
+    this.canvas!.removeEventListener("touchend", this.stopPainting);
+    this.canvas!.removeEventListener("mousemove", this.draw);
+    this.canvas!.removeEventListener("touchmove", this.draw);
   };
 }
 
@@ -97,13 +91,17 @@ export const CanvasDrawPanel: React.FC<{
   }, []);
 
   return (
-    <>
-      <button className="btn btn-primary" onClick={panel?.clearCanvas}>
-        Clear
-      </button>
+    <div className="container p-1">
       <div className="row">
-        <canvas ref={canvasRef} width="300" height="200" />
+        <div className="col-12">
+          <button className="btn btn-danger" onClick={panel?.clearCanvas}>
+            Clear
+          </button>
+        </div>
+        <div className="col-12">
+          <canvas ref={canvasRef} width="3000" height="2000" />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
