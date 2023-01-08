@@ -49,25 +49,38 @@ export const makeStaticPracticePath = (
 export const NavLink = ({
   label,
   url,
+  handleClose,
   className,
 }: {
   label: string;
   url: string;
+  handleClose: () => any;
   className?: string;
 }) => (
-  <Link href={url} className={className ?? ""}>
+  <Link href={url} className={className ?? ""} onClick={handleClose}>
     {label}
   </Link>
 );
 
-const makeNavLinks = (links: LinkType[], route: string) => {
+const makeNavLinks = (
+  links: LinkType[],
+  route: string,
+  handleClose: () => any
+) => {
   if (!links.length) return null;
   return links.map((l) => {
     const classNameWithActive = route.startsWith(l.url)
       ? `${l.className} active`
       : l.className;
     if (!Array.isArray(l.navChildren) || !l.navChildren.length) {
-      return <NavLink {...l} key={l.url} className={classNameWithActive} />;
+      return (
+        <NavLink
+          {...l}
+          key={l.url}
+          handleClose={handleClose}
+          className={classNameWithActive}
+        />
+      );
     }
     const { navChildren, ...subRootProps } = l;
     return (
@@ -75,9 +88,10 @@ const makeNavLinks = (links: LinkType[], route: string) => {
         <NavLink
           {...subRootProps}
           key={subRootProps.url}
+          handleClose={handleClose}
           className={classNameWithActive}
         />
-        {makeNavLinks(navChildren, route)}
+        {makeNavLinks(navChildren, route, handleClose)}
       </div>
     );
   });
@@ -86,7 +100,6 @@ const makeNavLinks = (links: LinkType[], route: string) => {
 export const Nav: React.FC<{}> = ({}) => {
   const [show, setShow] = React.useState(false);
   const router = useRouter();
-  console.log(router);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -99,7 +112,7 @@ export const Nav: React.FC<{}> = ({}) => {
           <Offcanvas.Title>Content</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className={styles.nav}>
-          {makeNavLinks(NavLinks, router.route)}
+          {makeNavLinks(NavLinks, router.route, handleClose)}
         </Offcanvas.Body>
       </Offcanvas>
     </>

@@ -149,7 +149,7 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
           </Col>
           <Col>
             <input
-              maxLength={6}
+              style={{ width: "100%" }}
               type="number"
               value={questionList[currentIdx].answer ?? ""}
               onChange={handleAnswerChange}
