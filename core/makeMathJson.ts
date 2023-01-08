@@ -4,7 +4,7 @@ import MathCalc from "./mathCalc";
 import Question, { MathQuestion, Op } from "./mathQuestion";
 
 const SUBTRACT_SCOPE = 20;
-const NUMBER_UPPER_SCOPE = 10;
+const NUMBER_UPPER_SCOPE = 25;
 const HOW_MANY_QUESTIONS = 1000;
 const JSON_LOCATION = path.join(process.cwd(), "/statics/math_questions");
 
@@ -14,7 +14,7 @@ const additionQuestionMaker = new Question(mathCalc, {
   questionCount: HOW_MANY_QUESTIONS,
   numOfOps: 1,
   allowedOps: [Op.plus],
-  scopeToResult: false,
+  scopeToResult: true,
 });
 
 const subtractQuestionMaker = new Question(mathCalc, {
