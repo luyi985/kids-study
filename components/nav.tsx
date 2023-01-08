@@ -1,5 +1,9 @@
 import * as React from "react";
 import Link from "next/link";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { Button } from "react-bootstrap";
+import styles from "../styles/Nav.module.scss";
+import { useRouter } from "next/router";
 
 type LinkType = {
   label: string;
@@ -15,17 +19,17 @@ const NavLinks: LinkType[] = [
   {
     label: "Mathematics",
     url: "/math",
-    className: "dropdown-item",
+    className: `nav-item ${styles.nav_item}`,
     navChildren: [
       {
         label: "Addition practice",
         url: "/math/addition",
-        className: "dropdown-item",
+        className: `${styles.nav_item} l2`,
       },
       {
         label: "Subtraction practice",
         url: "/math/subtraction",
-        className: "dropdown-item",
+        className: `${styles.nav_item} l2`,
       },
     ],
   },
@@ -42,7 +46,6 @@ export const makeStaticPracticePath = (
     url: `${baseUrl}${idx + 1}`,
   }));
 
-
 export const NavLink = ({
   label,
   url,
@@ -57,22 +60,48 @@ export const NavLink = ({
   </Link>
 );
 
-const makeNavLinks = (links: LinkType[]) => {
+const makeNavLinks = (links: LinkType[], route: string) => {
   if (!links.length) return null;
   return links.map((l) => {
+    const classNameWithActive = route.startsWith(l.url)
+      ? `${l.className} active`
+      : l.className;
     if (!Array.isArray(l.navChildren) || !l.navChildren.length) {
-      return <NavLink {...l} key={l.url} />;
+      return <NavLink {...l} key={l.url} className={classNameWithActive} />;
     }
     const { navChildren, ...subRootProps } = l;
     return (
       <div key={`${subRootProps.url}_sub_root`}>
-        <NavLink {...subRootProps} key={subRootProps.url} />
-        {makeNavLinks(navChildren)}
+        <NavLink
+          {...subRootProps}
+          key={subRootProps.url}
+          className={classNameWithActive}
+        />
+        {makeNavLinks(navChildren, route)}
       </div>
     );
   });
 };
 
-export const Nav: React.FC<{ root?: string; level?: number }> = ({ root }) => {
-  return <>{makeNavLinks(NavLinks)}</>;
+export const Nav: React.FC<{}> = ({}) => {
+  const [show, setShow] = React.useState(false);
+  const router = useRouter();
+  console.log(router);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow} className="ml-2">
+        <i className="bi bi-list"></i>
+      </Button>
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Content</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body className={styles.nav}>
+          {makeNavLinks(NavLinks, router.route)}
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
+  );
 };

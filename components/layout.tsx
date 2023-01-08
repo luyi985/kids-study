@@ -1,22 +1,25 @@
 import * as React from "react";
 import { Nav } from "@/components/nav";
+import BootstrapContainer from "react-bootstrap/Container";
+import BootstrapRow from "react-bootstrap/Row";
+import BootstrapCol from "react-bootstrap/Col";
+import Navbar from "react-bootstrap/Navbar";
 
-export const Container = (props: {
-  children: React.ReactNode[] | React.ReactNode;
-}) => <div>{props.children}</div>;
-
+export const Container = BootstrapContainer;
+export const Row = BootstrapRow;
+export const Col = BootstrapCol;
 export const Layout = (props: {
   children: React.ReactNode[] | React.ReactNode;
 }) => (
   <main>
-    <div className="page-row">
-      <div className="row">
-        <Nav />
-      </div>
-    </div>
-    <div className="page-row">{props.children}</div>
-    <footer className="page-row">
-      <div>this footer</div>
-    </footer>
+    <Navbar bg="dark" className="p-2 mb-2">
+      <Nav />
+    </Navbar>
+    <Container>
+      <Row>{props.children}</Row>
+      <Row>
+        <div>this footer</div>
+      </Row>
+    </Container>
   </main>
 );

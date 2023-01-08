@@ -1,6 +1,14 @@
 import { MathQuestion } from "@/core/mathQuestion";
 import React, { useRef, useState } from "react";
 import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Container,
+  ProgressBar,
+  Row,
+} from "react-bootstrap";
 
 const questionStyle = {
   padding: "20px",
@@ -8,6 +16,9 @@ const questionStyle = {
   width: "100%",
   display: "flex",
   justifyContent: "center",
+  fontSize: "35px",
+  textAlign: "center",
+  flexWrap: "wrap",
 };
 
 const ResultCell = ({
@@ -57,53 +68,50 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
       : Math.max(currentIdx - 1, 0);
     setCurrentIdx(nextStateIdx);
   };
-  const complete = `${((currentIdx * 100) / (questionList.length - 1)).toFixed(
-    2
-  )}%`;
+  const handleAnswerChange = (e: any) => {
+    const clone = questionList.slice();
+    clone[currentIdx].answer = parseFloat(
+      parseFloat(e.target.value ?? "").toFixed()
+    );
+    setQuestionList(clone);
+  };
+  const complete = (currentIdx * 100) / (questionList.length - 1);
   const isLast = currentIdx === questionList.length - 1;
   const hasAnswer = Boolean(questionList[currentIdx].answer);
   const disablePrev = currentIdx === 0;
   const disableNext = isLast || !hasAnswer;
   return (
-    <div className="container">
-      <div className="row">
-        <div className="btn-group">
-          <button
-            className="btn btn-primary"
-            onClick={handleNextPrev(false)}
-            disabled={disablePrev}
-          >
-            Previous
-          </button>
-
-          <button
-            className="btn btn-primary"
-            onClick={handleNextPrev(true)}
-            disabled={disableNext}
-          >
-            next
-          </button>
-
-          <button
+    <Container>
+      <Row className="mb-2">
+        <ButtonGroup>
+          <Button onClick={handleNextPrev(false)} disabled={disablePrev}>
+            <i className="bi bi-chevron-compact-left"></i>
+          </Button>
+          <Button
             disabled={!isLast}
-            className="btn btn-primary"
+            variant={isLast ? "success" : "primary"}
             onClick={() => setToggleScore((pre) => !pre)}
           >
             Show Score
-          </button>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-12">
-          <div className="progress" role="progressbar">
-            <div className="progress-bar" style={{ width: `${complete}` }}>
-              {`${currentIdx + 1}`}
-            </div>
-          </div>
-        </div>
-      </div>
+          </Button>
+          <Button onClick={handleNextPrev(true)} disabled={disableNext}>
+            <i className="bi bi-chevron-compact-right"></i>
+          </Button>
+        </ButtonGroup>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <ProgressBar
+            striped={isLast ? false : true}
+            animated={isLast ? false : true}
+            variant={isLast ? "success" : "info"}
+            now={complete}
+            label={`${currentIdx + 1}/${questionList.length}`}
+          />
+        </Col>
+      </Row>
       {toggleScore && (
-        <div className="row">
+        <Row>
           <div
             style={{
               flexWrap: "wrap",
@@ -122,27 +130,35 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
               />
             ))}
           </div>
-        </div>
+        </Row>
       )}
-      <div className="row">
-        <div className="col-12" style={questionStyle}>
-          <h1>{`${questionList[currentIdx].question} = ?`}</h1>
+      <Row>
+        <div
+          className="col-12"
+          // @ts-ignore
+          style={questionStyle}
+        >
+          <Col>
+            <h1
+              style={{
+                fontSize: "50px",
+                fontWeight: "bolder",
+                whiteSpace: "nowrap",
+              }}
+            >{`${questionList[currentIdx].question} =`}</h1>
+          </Col>
+          <Col>
+            <input
+              maxLength={6}
+              type="number"
+              value={questionList[currentIdx].answer ?? ""}
+              onChange={handleAnswerChange}
+            />
+          </Col>
         </div>
-        <div className="col-12 text-center">
-          <input
-            type="number"
-            value={questionList[currentIdx].answer ?? ""}
-            onChange={(e) => {
-              const clone = questionList.slice();
-              clone[currentIdx].answer = parseFloat(
-                parseFloat(e.target.value ?? "").toFixed()
-              );
-              setQuestionList(clone);
-            }}
-          />
-        </div>
+
         <CanvasDrawPanel handleSubmit={() => {}} />
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
 };
