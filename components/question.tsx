@@ -1,6 +1,7 @@
 import { MathQuestion } from "@/core/mathQuestion";
 import React, { useRef, useState } from "react";
 import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
+import { NumberInputPad } from "@/components/numberInputPad";
 import {
   Button,
   ButtonGroup,
@@ -22,13 +23,28 @@ const questionStyle = {
   alignItems: "center",
 };
 
+const ResultCellWrap: React.FC<{
+  children: React.ReactNode[] | React.ReactNode;
+}> = ({ children }) => (
+  <div
+    style={{
+      flexWrap: "wrap",
+      flexDirection: "row",
+      width: "100%",
+      display: "flex",
+      gap: "2px",
+    }}
+  >
+    {children}
+  </div>
+);
 const ResultCell = ({
   idx,
   question,
   pickQuestion,
 }: {
   idx: number;
-  question: MathQuestion & { answer?: number };
+  question: MathQuestion & { answer?: string };
   pickQuestion: (idx: number) => void;
 }) => {
   return (
@@ -44,7 +60,7 @@ const ResultCell = ({
         background: `${
           typeof question.answer === "undefined"
             ? "#ddd"
-            : question.answer === parseFloat(question.result)
+            : parseFloat(question.answer) === parseFloat(question.result)
             ? "green"
             : "red"
         }`,
@@ -60,20 +76,19 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
   questions,
 }) => {
   const [questionList, setQuestionList] =
-    useState<Array<MathQuestion & { answer?: number }>>(questions);
+    useState<Array<MathQuestion & { answer?: string }>>(questions);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [toggleScore, setToggleScore] = useState(false);
+
   const handleNextPrev = (isNext: boolean) => () => {
     const nextStateIdx = isNext
       ? Math.min(currentIdx + 1, questionList.length - 1)
       : Math.max(currentIdx - 1, 0);
     setCurrentIdx(nextStateIdx);
   };
-  const handleAnswerChange = (e: any) => {
+  const handleAnswerChange = (v: string | undefined) => {
     const clone = questionList.slice();
-    clone[currentIdx].answer = parseFloat(
-      parseFloat(e.target.value ?? "").toFixed()
-    );
+    clone[currentIdx].answer = v;
     setQuestionList(clone);
   };
   const complete = (currentIdx * 100) / (questionList.length - 1);
@@ -88,13 +103,15 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
           <Button onClick={handleNextPrev(false)} disabled={disablePrev}>
             <i className="bi bi-chevron-compact-left"></i>
           </Button>
-          <Button
-            disabled={!isLast}
-            variant={isLast ? "success" : "primary"}
-            onClick={() => setToggleScore((pre) => !pre)}
-          >
-            Show Score
-          </Button>
+          {isLast && hasAnswer && (
+            <Button
+              disabled={!isLast}
+              variant={isLast ? "success" : "primary"}
+              onClick={() => setToggleScore((pre) => !pre)}
+            >
+              Show Result
+            </Button>
+          )}
           <Button onClick={handleNextPrev(true)} disabled={disableNext}>
             <i className="bi bi-chevron-compact-right"></i>
           </Button>
@@ -112,16 +129,8 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
         </Col>
       </Row>
       {toggleScore && (
-        <Row>
-          <div
-            style={{
-              flexWrap: "wrap",
-              flexDirection: "row",
-              width: "100%",
-              display: "flex",
-              gap: "2px",
-            }}
-          >
+        <Row className="mt-2">
+          <ResultCellWrap>
             {questionList.map((q, idx) => (
               <ResultCell
                 idx={idx}
@@ -130,7 +139,7 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
                 pickQuestion={setCurrentIdx}
               />
             ))}
-          </div>
+          </ResultCellWrap>
         </Row>
       )}
       <Row>
@@ -144,17 +153,17 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
               fontWeight: "bolder",
               whiteSpace: "nowrap",
             }}
-          >{`${questionList[currentIdx].question} =`}</h1>
-
-          <input
-            style={{ width: "200px", textAlign: "center" }}
-            type="number"
-            value={questionList[currentIdx].answer ?? ""}
-            onChange={handleAnswerChange}
-          />
+          >{`${questionList[currentIdx].question} = ${
+            questionList?.[currentIdx]?.answer ?? ""
+          }`}</h1>
         </div>
-
-        <CanvasDrawPanel handleSubmit={() => {}} />
+        <Row style={{ justifyContent: "center" }}>
+          <NumberInputPad
+            getResult={handleAnswerChange}
+            currentValue={questionList[currentIdx].answer}
+          />
+        </Row>
+        {/* <CanvasDrawPanel handleSubmit={() => {}} /> */}
       </Row>
     </Container>
   );
