@@ -104,10 +104,10 @@ export const Nav: React.FC<{}> = ({}) => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button variant="primary" onClick={handleShow} className="ml-2">
+      <Button variant="primary" onClick={handleShow}>
         <i className="bi bi-list"></i>
       </Button>
-      <Offcanvas show={show} onHide={handleClose}>
+      <Offcanvas show={show} onHide={handleClose} style={{ maxWidth: "80%" }}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Content</Offcanvas.Title>
         </Offcanvas.Header>

@@ -19,6 +19,7 @@ const questionStyle = {
   fontSize: "35px",
   textAlign: "center",
   flexWrap: "wrap",
+  alignItems: "center",
 };
 
 const ResultCell = ({
@@ -138,23 +139,19 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
           // @ts-ignore
           style={questionStyle}
         >
-          <Col>
-            <h1
-              style={{
-                fontSize: "50px",
-                fontWeight: "bolder",
-                whiteSpace: "nowrap",
-              }}
-            >{`${questionList[currentIdx].question} =`}</h1>
-          </Col>
-          <Col>
-            <input
-              style={{ width: "100%" }}
-              type="number"
-              value={questionList[currentIdx].answer ?? ""}
-              onChange={handleAnswerChange}
-            />
-          </Col>
+          <h1
+            style={{
+              fontWeight: "bolder",
+              whiteSpace: "nowrap",
+            }}
+          >{`${questionList[currentIdx].question} =`}</h1>
+
+          <input
+            style={{ width: "200px", textAlign: "center" }}
+            type="number"
+            value={questionList[currentIdx].answer ?? ""}
+            onChange={handleAnswerChange}
+          />
         </div>
 
         <CanvasDrawPanel handleSubmit={() => {}} />
