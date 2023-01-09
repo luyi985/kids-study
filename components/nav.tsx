@@ -54,13 +54,22 @@ export const NavLink = ({
 }: {
   label: string;
   url: string;
-  handleClose: () => any;
+  handleClose?: () => any;
   className?: string;
-}) => (
-  <Link href={url} className={className ?? ""} onClick={handleClose}>
-    {label}
-  </Link>
-);
+}) => {
+  const router = useRouter();
+  const handleLinkClick = React.useCallback(() => {
+    if (handleClose) {
+      handleClose();
+    }
+    router.push(url);
+  }, [handleClose, router, url]);
+  return (
+    <Link href={url} className={className ?? ""} onClick={handleLinkClick}>
+      {label}
+    </Link>
+  );
+};
 
 const makeNavLinks = (
   links: LinkType[],
