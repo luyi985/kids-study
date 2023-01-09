@@ -157,12 +157,12 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
             questionList?.[currentIdx]?.answer ?? ""
           }`}</h1>
         </div>
-        <Row style={{ justifyContent: "center" }}>
+        <Col style={{ justifyContent: "center", display: "flex" }} span={12}>
           <NumberInputPad
             getResult={handleAnswerChange}
             currentValue={questionList[currentIdx].answer}
           />
-        </Row>
+        </Col>
         {/* <CanvasDrawPanel handleSubmit={() => {}} /> */}
       </Row>
     </Container>
