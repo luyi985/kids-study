@@ -1,5 +1,5 @@
 import { MathQuestion } from "@/core/mathQuestion";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
 import { NumberInputPad } from "@/components/numberInputPad";
 import {
@@ -96,6 +96,7 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
   const hasAnswer = Boolean(questionList[currentIdx].answer);
   const disablePrev = currentIdx === 0;
   const disableNext = isLast || !hasAnswer;
+  const isProgressLast = isLast && hasAnswer;
   return (
     <Container>
       <Row className="mb-2">
@@ -103,7 +104,7 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
           <Button onClick={handleNextPrev(false)} disabled={disablePrev}>
             <i className="bi bi-chevron-compact-left"></i>
           </Button>
-          {isLast && hasAnswer && (
+          {isProgressLast && (
             <Button
               disabled={!isLast}
               variant={isLast ? "success" : "primary"}
@@ -120,9 +121,9 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
       <Row>
         <Col span={12}>
           <ProgressBar
-            striped={isLast ? false : true}
-            animated={isLast ? false : true}
-            variant={isLast ? "success" : "info"}
+            striped={isProgressLast ? false : true}
+            animated={isProgressLast ? false : true}
+            variant={isProgressLast ? "success" : "info"}
             now={complete}
             label={`${currentIdx + 1}/${questionList.length}`}
           />
