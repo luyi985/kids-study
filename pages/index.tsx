@@ -13,7 +13,7 @@ export default function Home() {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <main className={styles.main}>
-        <div>kids study</div>
+        <div>{`This project name is kids-study`}</div>
       </main>
     </>
   );
