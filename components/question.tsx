@@ -17,7 +17,7 @@ const questionStyle = {
   width: "100%",
   display: "flex",
   justifyContent: "center",
-  fontSize: "35px",
+  fontSize: "50px",
   textAlign: "center",
   flexWrap: "wrap",
   alignItems: "center",
@@ -142,7 +142,7 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
           </ResultCellWrap>
         </Row>
       )}
-      <Row>
+      <Row style={{ alignItems: "flex-start" }}>
         <div
           className="col-12"
           // @ts-ignore
@@ -152,18 +152,25 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
             style={{
               fontWeight: "bolder",
               whiteSpace: "nowrap",
+              fontSize: "inherit",
             }}
           >{`${questionList[currentIdx].question} = ${
             questionList?.[currentIdx]?.answer ?? ""
           }`}</h1>
         </div>
-        <Col style={{ justifyContent: "center", display: "flex" }} span={12}>
+        <Col
+          style={{ justifyContent: "center", display: "flex" }}
+          xs={12}
+          md={6}
+        >
           <NumberInputPad
             getResult={handleAnswerChange}
             currentValue={questionList[currentIdx].answer}
           />
         </Col>
-        {/* <CanvasDrawPanel handleSubmit={() => {}} /> */}
+        <Col xs={12} md={6}>
+          <CanvasDrawPanel handleSubmit={() => {}} />
+        </Col>
       </Row>
     </Container>
   );

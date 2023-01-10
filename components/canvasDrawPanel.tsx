@@ -91,15 +91,18 @@ export const CanvasDrawPanel: React.FC<{
   }, []);
 
   return (
-    <div className="container p-1">
+    <div className="container-fluid p-1">
       <div className="row">
         <div className="col-12">
+          <canvas ref={canvasRef} width="3000" height="2000" />
+        </div>
+        <div
+          className="col-12"
+          style={{ justifyContent: "flex-end", display: "flex" }}
+        >
           <button className="btn btn-danger" onClick={panel?.clearCanvas}>
             Clear
           </button>
-        </div>
-        <div className="col-12">
-          <canvas ref={canvasRef} width="3000" height="2000" />
         </div>
       </div>
     </div>
