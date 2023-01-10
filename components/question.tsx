@@ -17,7 +17,7 @@ const questionStyle = {
   width: "100%",
   display: "flex",
   justifyContent: "center",
-  fontSize: "50px",
+  fontSize: "40px",
   textAlign: "center",
   flexWrap: "wrap",
   alignItems: "center",
