@@ -3,9 +3,10 @@ import { MathQuestion, MathCalcType } from "@/core/mathQuestion";
 import { PostgrestError, PostgrestResponse } from "@supabase/supabase-js";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
-enum MATH_DAY_STATUS {
+export enum MATH_DAY_STATUS {
   incomplete = "incomplete",
   complete = "complete",
+  nostart = "nostart",
 }
 
 export const useSetDayRecord = (
@@ -42,13 +43,19 @@ export const useGetDetailsOfIncompleteDay: (args: {
   setQuestionList: (q: Array<MathQuestion & { answer?: string }>) => void;
   setCurrentIdx: (idx: number) => void;
   currentIdx: number;
+  status: MATH_DAY_STATUS;
+  refetch: () => any;
 } = ({ questionList: originalQuestionList, day, type }) => {
   const { user, superBase } = useContext(SuperContext);
+  const [status, setStatus] = useState<MATH_DAY_STATUS>(
+    MATH_DAY_STATUS.nostart
+  );
   const [questionList, setQuestionList] =
     useState<Array<MathQuestion & { answer?: string }>>(originalQuestionList);
   const [currentIdx, setCurrentIdx] = useState(0);
   const hasRendered = useRef(false);
-  useEffect(() => {
+
+  const refetch = useCallback(() => {
     if (!superBase || !user?.id) return;
     hasRendered.current = true;
     superBase
@@ -57,15 +64,29 @@ export const useGetDetailsOfIncompleteDay: (args: {
         type_arg: type,
         user_id_arg: user?.id,
       })
-      .then((result) => {
+      .then(async (result) => {
         const resultQuestionList =
           result.data?.[0]?.details ?? originalQuestionList;
         setQuestionList(resultQuestionList);
         const lastIndex = resultQuestionList.findIndex(
           (q: any) => !Boolean(q.answer)
         );
-        setCurrentIdx(lastIndex < 0 ? questionList.length - 1 : lastIndex);
+        await setCurrentIdx(
+          lastIndex < 0 ? questionList.length - 1 : lastIndex
+        );
+        setStatus(result.data?.[0]?.status);
       });
+  }, [
+    day,
+    originalQuestionList,
+    questionList.length,
+    superBase,
+    type,
+    user?.id,
+  ]);
+
+  useEffect(() => {
+    refetch();
   }, [
     superBase,
     day,
@@ -73,6 +94,7 @@ export const useGetDetailsOfIncompleteDay: (args: {
     type,
     questionList.length,
     originalQuestionList,
+    refetch,
   ]);
 
   return {
@@ -80,5 +102,29 @@ export const useGetDetailsOfIncompleteDay: (args: {
     setQuestionList,
     setCurrentIdx,
     currentIdx,
+    status,
+    refetch,
   };
+};
+
+export const useGetDaysState = (type: MathCalcType) => {
+  const [dayStatus, setDayStatus] = useState<Record<number, MATH_DAY_STATUS>>(
+    {}
+  );
+  const { superBase, user } = useContext(SuperContext);
+  useEffect(() => {
+    if (!user?.id) return;
+    superBase
+      ?.rpc("get_math_days_status", {
+        type_arg: type,
+        user_id_arg: user?.id,
+      })
+      .then((result) => {
+        const { data, error } = result;
+        setDayStatus(
+          data?.reduce((acc, d) => ({ ...acc, [d.day]: d.status }), {})
+        );
+      });
+  }, [superBase, type, user?.id]);
+  return { dayStatus };
 };

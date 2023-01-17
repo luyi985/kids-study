@@ -1,19 +1,19 @@
+import { MathDayList } from "@/components/mathDayList";
 import {
   NavLink,
   SUBTRACTION_URL,
   makeStaticPracticePath,
 } from "@/components/nav";
 import { subtractionJson } from "@/core/makeMathJson";
+import { MathCalcType } from "@/core/mathQuestion";
 import * as React from "react";
 
 const Subtraction = ({ totalSubtractions }: { totalSubtractions: number }) => (
-  <ul className="list-group list-group-horizontal wrap">
-    {makeStaticPracticePath(SUBTRACTION_URL, totalSubtractions).map((props) => (
-      <li key={props.key} className="list-group-item col-2">
-        <NavLink {...props} />
-      </li>
-    ))}
-  </ul>
+  <MathDayList
+    baseUrl={SUBTRACTION_URL}
+    total={totalSubtractions}
+    type={MathCalcType.subtract}
+  />
 );
 
 export default Subtraction;

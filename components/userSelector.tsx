@@ -1,10 +1,13 @@
 import { useContext, useState } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
+import { getItemFromStorage, setItemToStorage } from "./common/storage";
 import { SuperContext, USER, useSetUser } from "./common/superContext";
 
 export const UserSelector = () => {
-  const { user, setUser } = useContext(SuperContext);
-  const [currentUser, setCurrentUser] = useState(user?.name ?? USER.FOREST);
+  const { user } = useContext(SuperContext);
+  const [currentUser, setCurrentUser] = useState(
+    user?.name ?? getItemFromStorage<USER>("currentUser") ?? undefined
+  );
   useSetUser(currentUser);
   return (
     <DropdownButton title={user?.name ?? "No User"}>
@@ -15,7 +18,9 @@ export const UserSelector = () => {
           onClick={(e) => {
             e.preventDefault();
             // @ts-ignore
-            setCurrentUser(e.target.innerHTML);
+            const userName = e.target.innerHTML;
+            setItemToStorage("currentUser", userName);
+            setCurrentUser(userName);
           }}
         >
           {name}

@@ -1,9 +1,10 @@
 import * as React from "react";
 import Link from "next/link";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { Button } from "react-bootstrap";
+import { Button, Container, Row } from "react-bootstrap";
 import styles from "../styles/Nav.module.scss";
 import { useRouter } from "next/router";
+import { UserSelector } from "./userSelector";
 
 type LinkType = {
   label: string;
@@ -39,8 +40,9 @@ export const makeStaticPracticePath = (
   baseUrl: string,
   totalCount: number,
   numPerDay: number = NUM_PER_DAY
-): Array<{ key: string; label: string; url: string }> =>
+): Array<{ key: string; label: string; url: string; day: number }> =>
   new Array(Math.ceil(totalCount / numPerDay)).fill(null).map((_, idx) => ({
+    day: idx + 1,
     key: `${idx + 1}`,
     label: `Day ${idx + 1}`,
     url: `${baseUrl}${idx + 1}`,
@@ -113,9 +115,12 @@ export const Nav: React.FC<{}> = ({}) => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        <i className="bi bi-list"></i>
-      </Button>
+      <Container fluid style={{ justifyContent: "flex-start", gap: "10px" }}>
+        <Button variant="primary" onClick={handleShow}>
+          <i className="bi bi-list"></i>
+        </Button>
+        <UserSelector />
+      </Container>
       <Offcanvas show={show} onHide={handleClose} style={{ maxWidth: "80%" }}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Content</Offcanvas.Title>

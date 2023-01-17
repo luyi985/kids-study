@@ -40,7 +40,7 @@ export const SuperProvider: React.FC<{
   );
 };
 
-export const useSetUser = (userName: USER) => {
+export const useSetUser = (userName?: USER) => {
   const { user, superBase, setUser } = useContext(SuperContext);
   useEffect(() => {
     if (!superBase) return;

@@ -13,6 +13,7 @@ import {
 import {
   useGetDetailsOfIncompleteDay,
   useSetDayRecord,
+  MATH_DAY_STATUS,
 } from "@/components/mathHook";
 
 const questionStyle = {
@@ -81,13 +82,18 @@ export const Questions: React.FC<{
   day: number;
   type: MathCalcType;
 }> = ({ questions, day, type }) => {
-  const [toggleScore, setToggleScore] = useState(false);
-  const { setQuestionList, questionList, currentIdx, setCurrentIdx } =
-    useGetDetailsOfIncompleteDay({
-      questionList: questions,
-      type,
-      day,
-    });
+  const {
+    setQuestionList,
+    questionList,
+    currentIdx,
+    setCurrentIdx,
+    status,
+    refetch,
+  } = useGetDetailsOfIncompleteDay({
+    questionList: questions,
+    type,
+    day,
+  });
 
   const handleNextPrev = (isNext: boolean) => async () => {
     const nextStateIdx = isNext
@@ -108,6 +114,7 @@ export const Questions: React.FC<{
   const disablePrev = currentIdx === 0;
   const disableNext = isLast || !hasAnswer;
   const isProgressLast = isLast && hasAnswer;
+  const isComplete = status === MATH_DAY_STATUS.complete;
   return (
     <Container>
       <Row className="mb-2">
@@ -115,13 +122,13 @@ export const Questions: React.FC<{
           <Button onClick={handleNextPrev(false)} disabled={disablePrev}>
             <i className="bi bi-chevron-compact-left"></i>
           </Button>
-          {isProgressLast && (
+          {isProgressLast && !isComplete && (
             <Button
               disabled={!isLast}
               variant={isLast ? "success" : "primary"}
               onClick={async () => {
-                await setToggleScore((pre) => true);
-                setDayRecord();
+                await setDayRecord();
+                refetch();
               }}
             >
               Show Result
@@ -143,7 +150,7 @@ export const Questions: React.FC<{
           />
         </Col>
       </Row>
-      {toggleScore && (
+      {isComplete && (
         <Row className="mt-2">
           <ResultCellWrap>
             {questionList.map((q, idx) => (
