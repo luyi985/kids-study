@@ -8,7 +8,7 @@ const question = new Question(mathCalc, {
   scope: 10,
   questionCount: 20,
   numOfOps: 1,
-  allowedOps: [Op.plus],
+  allowedOps: [Op.addition],
   scopeToResult: false,
 });
 

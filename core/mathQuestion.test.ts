@@ -6,7 +6,7 @@ const question = new Question(calc, {
   questionCount: 10,
   numOfOps: 10,
   scope: 10,
-  allowedOps: [Op.product, Op.plus, Op.subtract],
+  allowedOps: [Op.multiply, Op.addition, Op.subtract],
 });
 
 describe("Question", () => {

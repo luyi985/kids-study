@@ -3,15 +3,14 @@ import "bootstrap-icons/font/bootstrap-icons.scss";
 import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 import { Layout } from "@/components/layout";
-import { initSuperDb } from "@/core/superDb";
-export default function App({ Component, pageProps }: AppProps) {
-  // useEffect(() => {
-   const superDb = initSuperDb();
-  // }, []);
 
+import { SuperProvider } from "@/components/common/superContext";
+export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <SuperProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SuperProvider>
   );
 }

@@ -5,13 +5,14 @@ import {
 } from "@/components/nav";
 import { Questions } from "@/components/question";
 import { additionJson } from "@/core/makeMathJson";
-import { MathQuestion } from "@/core/mathQuestion";
+import { MathCalcType, MathQuestion } from "@/core/mathQuestion";
 import Head from "next/head";
 import { FC } from "react";
 
 const Addition: FC<{
   additions: MathQuestion[];
-}> = ({ additions }) => {
+  day: number;
+}> = ({ additions, day }) => {
   return (
     <>
       <Head>
@@ -22,7 +23,7 @@ const Addition: FC<{
           content="width=device-width, initial-scale=1, user-scalable=no"
         />
       </Head>
-      <Questions questions={additions} />
+      <Questions questions={additions} day={day} type={MathCalcType.addition} />
     </>
   );
 };
@@ -34,7 +35,7 @@ export async function getStaticProps(context: any) {
   const day = Number(context?.params?.day ?? 1);
   const start = NUM_PER_DAY * Math.max(day - 1, 0);
   return {
-    props: { additions: data.slice(start, start + NUM_PER_DAY) },
+    props: { additions: data.slice(start, start + NUM_PER_DAY), day },
   };
 }
 

@@ -4,6 +4,7 @@ import BootstrapContainer from "react-bootstrap/Container";
 import BootstrapRow from "react-bootstrap/Row";
 import BootstrapCol from "react-bootstrap/Col";
 import Navbar from "react-bootstrap/Navbar";
+import { UserSelector } from "@/components/userSelector";
 
 export const Container = BootstrapContainer;
 export const Row = BootstrapRow;
@@ -15,6 +16,7 @@ export const Layout = (props: {
     <Navbar bg="dark" className="p-2 mb-2">
       <Nav />
     </Navbar>
+    <UserSelector />
     <Container>
       <Row>{props.children}</Row>
       <Row>

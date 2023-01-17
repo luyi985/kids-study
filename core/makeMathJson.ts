@@ -13,7 +13,7 @@ const additionQuestionMaker = new Question(mathCalc, {
   scope: NUMBER_UPPER_SCOPE,
   questionCount: HOW_MANY_QUESTIONS,
   numOfOps: 1,
-  allowedOps: [Op.plus],
+  allowedOps: [Op.addition],
   scopeToResult: true,
 });
 
@@ -27,12 +27,12 @@ const subtractQuestionMaker = new Question(mathCalc, {
 
 export const additionJson = (): MathQuestion[] => {
   try {
-    const data = fs.readFileSync(`${JSON_LOCATION}/plus.json`).toString();
+    const data = fs.readFileSync(`${JSON_LOCATION}/addition.json`).toString();
     return JSON.parse(data);
   } catch (e) {
     const additionQuestions = additionQuestionMaker.make();
     fs.writeFileSync(
-      `${JSON_LOCATION}/plus.json`,
+      `${JSON_LOCATION}/addition.json`,
       JSON.stringify(additionQuestions, null, 4),
       { flag: "w" }
     );

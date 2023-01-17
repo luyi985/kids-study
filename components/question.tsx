@@ -1,4 +1,4 @@
-import { MathQuestion } from "@/core/mathQuestion";
+import { MathQuestion, MathCalcType } from "@/core/mathQuestion";
 import React, { useState } from "react";
 import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
 import { NumberInputPad } from "@/components/numberInputPad";
@@ -10,6 +10,10 @@ import {
   ProgressBar,
   Row,
 } from "react-bootstrap";
+import {
+  useGetDetailsOfIncompleteDay,
+  useSetDayRecord,
+} from "@/components/mathHook";
 
 const questionStyle = {
   padding: "20px",
@@ -72,28 +76,35 @@ const ResultCell = ({
   );
 };
 
-export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
-  questions,
-}) => {
-  const [questionList, setQuestionList] =
-    useState<Array<MathQuestion & { answer?: string }>>(questions);
-  const [currentIdx, setCurrentIdx] = useState(0);
+export const Questions: React.FC<{
+  questions: Array<MathQuestion & { answer?: string }>;
+  day: number;
+  type: MathCalcType;
+}> = ({ questions, day, type }) => {
   const [toggleScore, setToggleScore] = useState(false);
+  const { setQuestionList, questionList, currentIdx, setCurrentIdx } =
+    useGetDetailsOfIncompleteDay({
+      questionList: questions,
+      type,
+      day,
+    });
 
-  const handleNextPrev = (isNext: boolean) => () => {
+  const handleNextPrev = (isNext: boolean) => async () => {
     const nextStateIdx = isNext
       ? Math.min(currentIdx + 1, questionList.length - 1)
       : Math.max(currentIdx - 1, 0);
-    setCurrentIdx(nextStateIdx);
+    await setCurrentIdx(nextStateIdx);
+    await setDayRecord();
   };
   const handleAnswerChange = (v: string | undefined) => {
     const clone = questionList.slice();
     clone[currentIdx].answer = v;
     setQuestionList(clone);
   };
+  const { setDayRecord } = useSetDayRecord(day, type, questionList);
   const complete = (currentIdx * 100) / (questionList.length - 1);
   const isLast = currentIdx === questionList.length - 1;
-  const hasAnswer = Boolean(questionList[currentIdx].answer);
+  const hasAnswer = Boolean(questionList?.[currentIdx]?.answer);
   const disablePrev = currentIdx === 0;
   const disableNext = isLast || !hasAnswer;
   const isProgressLast = isLast && hasAnswer;
@@ -108,7 +119,10 @@ export const Questions: React.FC<{ questions: MathQuestion[] }> = ({
             <Button
               disabled={!isLast}
               variant={isLast ? "success" : "primary"}
-              onClick={() => setToggleScore((pre) => !pre)}
+              onClick={async () => {
+                await setToggleScore((pre) => true);
+                setDayRecord();
+              }}
             >
               Show Result
             </Button>

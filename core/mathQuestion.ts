@@ -1,8 +1,16 @@
 import MathCalc from "./mathCalc";
+
+export enum MathCalcType {
+  "addition" = "addition",
+  "subtract" = "subtract",
+  "multiply" = "multiply",
+  "divide" = "divide",
+}
+
 export enum Op {
-  "plus" = "+",
+  "addition" = "+",
   "subtract" = "-",
-  "product" = "*",
+  "multiply" = "*",
   "divide" = "/",
 }
 
@@ -15,7 +23,7 @@ export type MathQuestion = {
 };
 
 export default class Question {
-  private ops: Op[] = [Op.plus, Op.subtract, Op.product, Op.divide];
+  private ops: Op[] = [Op.addition, Op.subtract, Op.multiply, Op.divide];
   private scope: number = 100;
   private scopeToResult: boolean = true;
   private excludeNegative: boolean = true;

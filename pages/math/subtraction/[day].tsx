@@ -5,12 +5,13 @@ import {
 } from "@/components/nav";
 import { Questions } from "@/components/question";
 import { subtractionJson } from "@/core/makeMathJson";
-import { MathQuestion } from "@/core/mathQuestion";
+import { MathCalcType, MathQuestion } from "@/core/mathQuestion";
 import Head from "next/head";
 import { FC } from "react";
 const subtraction: FC<{
   subtractions: MathQuestion[];
-}> = ({ subtractions }) => {
+  day: number;
+}> = ({ subtractions, day }) => {
   return (
     <>
       <Head>
@@ -21,7 +22,11 @@ const subtraction: FC<{
           content="width=device-width, initial-scale=1, user-scalable=no"
         />
       </Head>
-      <Questions questions={subtractions} />
+      <Questions
+        questions={subtractions}
+        day={day}
+        type={MathCalcType.subtract}
+      />
     </>
   );
 };
@@ -33,7 +38,7 @@ export async function getStaticProps(context: any) {
   const day = Number(context?.params?.day ?? 1);
   const start = NUM_PER_DAY * Math.max(day - 1, 0);
   return {
-    props: { subtractions: data.slice(start, start + NUM_PER_DAY) },
+    props: { subtractions: data.slice(start, start + NUM_PER_DAY), day },
   };
 }
 
