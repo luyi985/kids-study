@@ -12,6 +12,7 @@ const superBase = initSuperDb();
 export enum USER {
   FOREST = "Forest",
   LYNDON = "Lyndon",
+  DADDY = "Daddy",
 }
 type USER_DETAILS = { name: USER; id: number };
 type SuperContextValue = {

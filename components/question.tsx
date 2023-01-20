@@ -1,4 +1,3 @@
-import { MathQuestion, MathCalcType } from "@/core/mathQuestion";
 import React, { useState } from "react";
 import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
 import { NumberInputPad } from "@/components/numberInputPad";
@@ -15,6 +14,8 @@ import {
   useSetDayRecord,
   MATH_DAY_STATUS,
 } from "@/components/mathHook";
+import { DayQuestion, MathCalcType } from "./types";
+import { ScoreResult } from "@/components/scoreResult";
 
 const questionStyle = {
   padding: "20px",
@@ -49,7 +50,7 @@ const ResultCell = ({
   pickQuestion,
 }: {
   idx: number;
-  question: MathQuestion & { answer?: string };
+  question: DayQuestion;
   pickQuestion: (idx: number) => void;
 }) => {
   return (
@@ -78,7 +79,7 @@ const ResultCell = ({
 };
 
 export const Questions: React.FC<{
-  questions: Array<MathQuestion & { answer?: string }>;
+  questions: Array<DayQuestion>;
   day: number;
   type: MathCalcType;
 }> = ({ questions, day, type }) => {
@@ -87,7 +88,7 @@ export const Questions: React.FC<{
     questionList,
     currentIdx,
     setCurrentIdx,
-    status,
+    meta,
     refetch,
   } = useGetDetailsOfIncompleteDay({
     questionList: questions,
@@ -100,6 +101,7 @@ export const Questions: React.FC<{
       ? Math.min(currentIdx + 1, questionList.length - 1)
       : Math.max(currentIdx - 1, 0);
     await setCurrentIdx(nextStateIdx);
+    if (isComplete) return;
     await setDayRecord();
   };
   const handleAnswerChange = (v: string | undefined) => {
@@ -114,9 +116,13 @@ export const Questions: React.FC<{
   const disablePrev = currentIdx === 0;
   const disableNext = isLast || !hasAnswer;
   const isProgressLast = isLast && hasAnswer;
-  const isComplete = status === MATH_DAY_STATUS.complete;
+  const isComplete = meta.status === MATH_DAY_STATUS.complete;
+
   return (
     <Container>
+      {isComplete && (
+        <ScoreResult {...{ day, questions: questionList, type, ...meta }} />
+      )}
       <Row className="mb-2">
         <ButtonGroup>
           <Button onClick={handleNextPrev(false)} disabled={disablePrev}>
@@ -139,17 +145,19 @@ export const Questions: React.FC<{
           </Button>
         </ButtonGroup>
       </Row>
-      <Row>
-        <Col span={12}>
-          <ProgressBar
-            striped={isProgressLast ? false : true}
-            animated={isProgressLast ? false : true}
-            variant={isProgressLast ? "success" : "info"}
-            now={complete}
-            label={`${currentIdx + 1}/${questionList.length}`}
-          />
-        </Col>
-      </Row>
+      {!isComplete && (
+        <Row>
+          <Col span={12}>
+            <ProgressBar
+              striped={isProgressLast ? false : true}
+              animated={isProgressLast ? false : true}
+              variant={isProgressLast ? "success" : "info"}
+              now={complete}
+              label={`${currentIdx + 1}/${questionList.length}`}
+            />
+          </Col>
+        </Row>
+      )}
       {isComplete && (
         <Row className="mt-2">
           <ResultCellWrap>

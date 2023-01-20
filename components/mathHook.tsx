@@ -9,6 +9,11 @@ export enum MATH_DAY_STATUS {
   nostart = "nostart",
 }
 
+export type QuestionMeta = {
+  status: MATH_DAY_STATUS;
+  start: string;
+  end: string;
+};
 export const useSetDayRecord = (
   day: number,
   type: MathCalcType,
@@ -43,13 +48,15 @@ export const useGetDetailsOfIncompleteDay: (args: {
   setQuestionList: (q: Array<MathQuestion & { answer?: string }>) => void;
   setCurrentIdx: (idx: number) => void;
   currentIdx: number;
-  status: MATH_DAY_STATUS;
+  meta: QuestionMeta;
   refetch: () => any;
 } = ({ questionList: originalQuestionList, day, type }) => {
   const { user, superBase } = useContext(SuperContext);
-  const [status, setStatus] = useState<MATH_DAY_STATUS>(
-    MATH_DAY_STATUS.nostart
-  );
+  const [meta, setMeta] = useState<QuestionMeta>({
+    status: MATH_DAY_STATUS.nostart,
+    start: "",
+    end: "",
+  });
   const [questionList, setQuestionList] =
     useState<Array<MathQuestion & { answer?: string }>>(originalQuestionList);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -74,7 +81,13 @@ export const useGetDetailsOfIncompleteDay: (args: {
         await setCurrentIdx(
           lastIndex < 0 ? questionList.length - 1 : lastIndex
         );
-        setStatus(result.data?.[0]?.status);
+        console.log(result.data?.[0]);
+        setMeta((pre) => ({
+          ...pre,
+          status: result.data?.[0]?.status,
+          start: result.data?.[0]?.created_at,
+          end: result.data?.[0]?.updated_at,
+        }));
       });
   }, [
     day,
@@ -102,7 +115,7 @@ export const useGetDetailsOfIncompleteDay: (args: {
     setQuestionList,
     setCurrentIdx,
     currentIdx,
-    status,
+    meta,
     refetch,
   };
 };

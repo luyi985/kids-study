@@ -3,7 +3,8 @@ set role app_user;
 insert into public.users (name)
 values 
   ('Forest'),
-  ('Lyndon');
+  ('Lyndon')
+  ('Daddy');
       
 insert into public.math_records(user_id, day, details, status, type)
 values

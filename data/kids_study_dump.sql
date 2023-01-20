@@ -22,6 +22,8 @@ DROP USER IF EXISTS APP_USER;
 CREATE USER APP_USER LOGIN PASSWORD 'qazzaq123';
 CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION APP_USER;
 
+
+--- Tables
 CREATE TYPE math_calc_type AS ENUM ('addition', 'subtract', 'divide', 'multiply');
 CREATE TYPE math_day_status_type AS ENUM ('incomplete', 'complete', 'notstart');
 
@@ -46,6 +48,7 @@ ALTER SEQUENCE IF EXISTS public.math_records_id_seq RESTART WITH 1;
 CREATE UNIQUE INDEX public_math_records_day_user_index ON public.math_records(day, user_id, type);
 CREATE UNIQUE INDEX public_users_index ON public.users(name);
 
+
 GRANT USAGE ON SCHEMA public TO APP_USER;
 GRANT ALL ON public.math_records TO APP_USER;
 GRANT ALL ON public.users TO APP_USER;
@@ -53,7 +56,26 @@ GRANT ALL ON public.users_id_seq TO APP_USER;
 GRANT ALL ON public.math_records_id_seq TO APP_USER;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO APP_USER;
 
+--- triggers
+drop trigger if exists set_updated_at_math_records on public.math_records;
+drop function if exists public.set_updated_at_math_records_fn();
+create function public.set_updated_at_math_records_fn()
+returns trigger
+as $$
+begin
+ if new.status != 'complete' then
+  new.updated_at = now();
+ end if;
+  return new;
+end;
+$$ language plpgsql;
 
+create trigger set_updated_at_math_records 
+before UPDATE on public.math_records
+FOR EACH ROW
+execute function public.set_updated_at_math_records_fn();
+
+--- custom function
 create or replace function public.get_math_day_record(day_arg int, type_arg math_calc_type, user_id_arg int) 
 returns setof public.math_records
  as $$
@@ -75,6 +97,9 @@ as $$
   returning *;
 $$ language sql;
 
+alter table public.math_records
+drop column if exists updated_at,
+add column updated_at timestamp without time zone default (now() at time zone 'utc');
 
 
 create or replace function public.get_math_days_status(type_arg math_calc_type, user_id_arg int) 
