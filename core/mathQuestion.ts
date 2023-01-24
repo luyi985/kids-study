@@ -97,7 +97,7 @@ export default class Question {
           (q) =>
             !isNaN(parseFloat(q.result)) &&
             (!this.scopeToResult || parseFloat(q.result) <= this.scope) &&
-            (!this.excludeNegative || parseFloat(q.result) >= 0)
+            (!this.excludeNegative || parseFloat(q.result) > 0)
         ),
       ];
     }
