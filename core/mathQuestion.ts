@@ -61,7 +61,7 @@ export default class Question {
   private pickNumber(picked: number[] = []): number[] {
     if (Object.keys(picked).length >= this.questionCount)
       return Object.values(picked);
-    const pick = Math.floor(Math.random() * this.scope);
+    const pick = 1 + Math.floor(Math.random() * this.scope);
     return this.pickNumber([...picked, pick]);
   }
   private pickOp() {
