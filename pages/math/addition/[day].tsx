@@ -12,7 +12,8 @@ import { FC } from "react";
 const Addition: FC<{
   additions: MathQuestion[];
   day: number;
-}> = ({ additions, day }) => {
+  staticData: string;
+}> = ({ additions, day, staticData }) => {
   return (
     <>
       <Head>
@@ -34,8 +35,12 @@ export async function getStaticProps(context: any) {
   const data = additionJson();
   const day = Number(context?.params?.day ?? 1);
   const start = NUM_PER_DAY * Math.max(day - 1, 0);
+
   return {
-    props: { additions: data.slice(start, start + NUM_PER_DAY), day },
+    props: {
+      additions: data.slice(start, start + NUM_PER_DAY),
+      day,
+    },
   };
 }
 

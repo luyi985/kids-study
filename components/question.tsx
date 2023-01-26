@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { CanvasDrawPanel } from "@/components/canvasDrawPanel";
 import { NumberInputPad } from "@/components/numberInputPad";
 import {
@@ -16,6 +16,7 @@ import {
 } from "@/components/mathHook";
 import { DayQuestion, MathCalcType } from "./types";
 import { ScoreResult } from "@/components/scoreResult";
+import { Daddy } from "@/components/daddy";
 
 const questionStyle = {
   padding: "20px",
@@ -117,7 +118,7 @@ export const Questions: React.FC<{
   const disableNext = isLast || !hasAnswer;
   const isProgressLast = isLast && hasAnswer;
   const isComplete = meta.status === MATH_DAY_STATUS.complete;
-
+  const daddyRef = useRef(null);
   return (
     <Container>
       {isComplete && (
@@ -133,6 +134,8 @@ export const Questions: React.FC<{
               disabled={!isLast}
               variant={isLast ? "success" : "primary"}
               onClick={async () => {
+                (daddyRef.current as any)?.play();
+                (daddyRef.current as any).muted = false;
                 await setDayRecord();
                 refetch();
               }}
@@ -202,6 +205,7 @@ export const Questions: React.FC<{
           <CanvasDrawPanel handleSubmit={() => {}} />
         </Col>
       </Row>
+      <Daddy ref={daddyRef} />
     </Container>
   );
 };

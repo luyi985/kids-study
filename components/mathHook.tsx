@@ -1,6 +1,5 @@
 import { SuperContext } from "@/components/common/superContext";
 import { MathQuestion, MathCalcType } from "@/core/mathQuestion";
-import { PostgrestError, PostgrestResponse } from "@supabase/supabase-js";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 export enum MATH_DAY_STATUS {
@@ -81,7 +80,6 @@ export const useGetDetailsOfIncompleteDay: (args: {
         await setCurrentIdx(
           lastIndex < 0 ? questionList.length - 1 : lastIndex
         );
-        console.log(result.data?.[0]);
         setMeta((pre) => ({
           ...pre,
           status: result.data?.[0]?.status,
