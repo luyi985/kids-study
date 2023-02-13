@@ -1,10 +1,23 @@
 import { Video } from "@/components/video";
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import styles from "../styles/Daddy.module.scss";
-
-export const Daddy = forwardRef(function Daddy(_, ref: any) {
+const videoStaticPath =
+  "https://github.com/luyi985/kids-study/raw/main/statics/video/";
+export const Daddy = forwardRef(function Daddy(
+  { type }: { type: "HAPPY" | "ANGRY" },
+  ref: any
+) {
   const [canActive, setCanActive] = useState<boolean>(false);
   const [isActive, setActive] = useState<boolean>(false);
+  const [file, setFile] = useState("daddy-1080.mov");
+  useEffect(() => {
+    if (type === "ANGRY") {
+      setFile("angry_daddy.mov");
+    }
+    if (type === "HAPPY") {
+      setFile("daddy-1080.mov");
+    }
+  }, [type]);
 
   const playHandler = useCallback(
     (e: any) => {
@@ -42,7 +55,7 @@ export const Daddy = forwardRef(function Daddy(_, ref: any) {
   const sources = [
     {
       type: "video/mp4",
-      src: "https://github.com/luyi985/kids-study/raw/main/statics/video/daddy-1080.mov",
+      src: `${videoStaticPath}${file}`,
     },
   ];
   return (

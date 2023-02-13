@@ -15,7 +15,7 @@ import {
   MATH_DAY_STATUS,
 } from "@/components/mathHook";
 import { DayQuestion, MathCalcType } from "./types";
-import { ScoreResult } from "@/components/scoreResult";
+import { ScoreResult, useGetMark } from "@/components/scoreResult";
 import { Daddy } from "@/components/daddy";
 
 const questionStyle = {
@@ -119,10 +119,20 @@ export const Questions: React.FC<{
   const isProgressLast = isLast && hasAnswer;
   const isComplete = meta.status === MATH_DAY_STATUS.complete;
   const daddyRef = useRef(null);
+  const { mark, correctCount } = useGetMark(questionList);
   return (
     <Container>
       {isComplete && (
-        <ScoreResult {...{ day, questions: questionList, type, ...meta }} />
+        <ScoreResult
+          {...{
+            day,
+            mark,
+            correctCount,
+            type,
+            totalQuestions: questionList.length,
+            ...meta,
+          }}
+        />
       )}
       <Row className="mb-2">
         <ButtonGroup>
@@ -205,7 +215,7 @@ export const Questions: React.FC<{
           <CanvasDrawPanel handleSubmit={() => {}} />
         </Col>
       </Row>
-      <Daddy ref={daddyRef} />
+      <Daddy ref={daddyRef} type={mark > 80 ? "HAPPY" : "ANGRY"} />
     </Container>
   );
 };

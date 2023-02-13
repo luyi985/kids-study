@@ -3,8 +3,8 @@ import path from "path";
 import MathCalc from "./mathCalc";
 import Question, { MathQuestion, Op } from "./mathQuestion";
 
-const SUBTRACT_SCOPE = 10;
-const NUMBER_UPPER_SCOPE = 25;
+const SUBTRACT_SCOPE = 20;
+const NUMBER_UPPER_SCOPE = 40;
 const HOW_MANY_QUESTIONS = 1000;
 const JSON_LOCATION = path.join(process.cwd(), "/statics/math_questions");
 

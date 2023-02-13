@@ -7,7 +7,7 @@ type VideoProps = {
 
 export const Video = forwardRef(function Video(props: VideoProps, ref: any) {
   return (
-    <video width="320" height="320" ref={ref} muted playsInline>
+    <video width="320" height="320" ref={ref} muted playsInline preload="auto">
       {props.sources.map((s) => (
         <source key={s.src} {...s} />
       ))}
