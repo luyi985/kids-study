@@ -14,7 +14,7 @@ const additionQuestionMaker = new Question(mathCalc, {
   questionCount: HOW_MANY_QUESTIONS,
   numOfOps: 1,
   allowedOps: [Op.addition],
-  scopeToResult: true,
+  scopeToResult: false,
 });
 
 const subtractQuestionMaker = new Question(mathCalc, {
