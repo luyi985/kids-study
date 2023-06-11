@@ -4,8 +4,8 @@ import MathCalc from "./mathCalc";
 import Question, { MathQuestion, Op } from "./mathQuestion";
 
 const SUBTRACT_SCOPE = 20;
-const NUMBER_UPPER_SCOPE = 10;
-const HOW_MANY_QUESTIONS = 1000;
+const NUMBER_UPPER_SCOPE = 15;
+const HOW_MANY_QUESTIONS = 2000;
 const JSON_LOCATION = path.join(process.cwd(), "/statics/math_questions");
 
 const mathCalc = new MathCalc();
