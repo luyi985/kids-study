@@ -204,14 +204,14 @@ export const Questions: React.FC<{
         <Col
           style={{ justifyContent: "center", display: "flex" }}
           xs={12}
-          md={5}
+          md={3}
         >
           <NumberInputPad
             getResult={handleAnswerChange}
             currentValue={questionList[currentIdx].answer}
           />
         </Col>
-        <Col xs={12} md={7}>
+        <Col xs={12} md={9}>
           <CanvasDrawPanel handleSubmit={() => {}} />
         </Col>
       </Row>
