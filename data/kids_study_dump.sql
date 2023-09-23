@@ -24,7 +24,7 @@ CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION APP_USER;
 
 
 --- Tables
-CREATE TYPE math_calc_type AS ENUM ('addition', 'subtract', 'divide', 'multiply');
+CREATE TYPE math_calc_type AS ENUM ('addition', 'subtract', 'divide', 'multiply', 'mix');
 CREATE TYPE math_day_status_type AS ENUM ('incomplete', 'complete', 'notstart');
 
 create table public.users(

@@ -15,6 +15,7 @@ type LinkType = {
 
 export const ADDITION_URL = "/math/addition/";
 export const SUBTRACTION_URL = "/math/subtraction/";
+export const MIX_URL = "/math/mix/";
 export const NUM_PER_DAY = 25;
 const NavLinks: LinkType[] = [
   {
@@ -30,6 +31,11 @@ const NavLinks: LinkType[] = [
       {
         label: "Subtraction practice",
         url: "/math/subtraction",
+        className: `${styles.nav_item} l2`,
+      },
+      {
+        label: "Mix practice",
+        url: "/math/mix",
         className: `${styles.nav_item} l2`,
       },
     ],

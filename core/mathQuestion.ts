@@ -5,6 +5,7 @@ export enum MathCalcType {
   "subtract" = "subtract",
   "multiply" = "multiply",
   "divide" = "divide",
+  "mix" = "mix",
 }
 
 export enum Op {
