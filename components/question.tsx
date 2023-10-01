@@ -215,7 +215,7 @@ export const Questions: React.FC<{
           <CanvasDrawPanel handleSubmit={() => {}} />
         </Col>
       </Row>
-      <Daddy ref={daddyRef} type={mark > 80 ? "HAPPY" : "ANGRY"} />
+      <Daddy ref={daddyRef} type={mark > 90 ? "HAPPY" : "ANGRY"} />
     </Container>
   );
 };

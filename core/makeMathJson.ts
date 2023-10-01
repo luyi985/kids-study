@@ -3,7 +3,7 @@ import path from "path";
 import MathCalc from "./mathCalc";
 import Question, { MathQuestion, Op } from "./mathQuestion";
 
-const MIX_SCOPE = 25;
+const MIX_SCOPE = 15;
 const SUBTRACT_SCOPE = 20;
 const NUMBER_UPPER_SCOPE = 15;
 const HOW_MANY_QUESTIONS = 4000;
